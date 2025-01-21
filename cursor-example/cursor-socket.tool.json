@@ -1,0 +1,115 @@
+{
+    "name": "websocket-bridge",
+    "description": "Facilitate communication between Cursor and Roo Cline via WebSocket using cursor-socket-server.",
+    "type": "tool",
+    "functions": [
+        {
+            "name": "send_prompt",
+            "description": "Send a prompt to Roo Cline over the WebSocket connection.",
+            "parameters": {
+                "properties": {
+                    "prompt": {
+                        "type": "string",
+                        "description": "The prompt to send to Roo Cline."
+                    },
+                    "prompt_type": {
+                        "type": "string",
+                        "enum": [
+                            "global_refactor",
+                            "impact_analysis",
+                            "long_range_plan",
+                            "context_summary",
+                            "code_review",
+                            "dependency_resolution",
+                            "bug_detection",
+                            "security_audit",
+                            "performance_optimization",
+                            "general"
+                        ],
+                        "description": "Type of prompt for categorization and routing on the Roo Cline side."
+                    },
+                    "context_files": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Optional list of file paths relevant to the prompt."
+                    }
+                },
+                "required": [
+                    "prompt",
+                    "prompt_type"
+                ]
+            }
+        },
+        {
+            "name": "get_logs",
+            "description": "Retrieve logs from the cursor-socket-server.",
+            "parameters": {
+                "properties": {
+                    "log_type": {
+                        "type": "string",
+                        "enum": [
+                            "all",
+                            "connection",
+                            "message",
+                            "error"
+                        ],
+                        "default": "all",
+                        "description": "Type of logs to retrieve."
+                    },
+                    "lines": {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Number of log lines to retrieve (use with 'tail')."
+                    },
+                    "follow": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Whether to follow the logs in real-time."
+                    }
+                },
+                "required": []
+            }
+        },
+        {
+            "name": "manage_subprocess",
+            "description": "Manage sub-processes within the cursor-socket-server.",
+            "parameters": {
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "enum": [
+                            "start",
+                            "stop",
+                            "status"
+                        ],
+                        "description": "Action to perform on the sub-process."
+                    },
+                    "process_name": {
+                        "type": "string",
+                        "description": "Name of the sub-process to manage."
+                    }
+                },
+                "required": [
+                    "action",
+                    "process_name"
+                ]
+            }
+        }
+    ],
+    "examples": [
+        {
+            "description": "Send a global refactoring prompt to Roo Cline",
+            "command": "websocket-bridge send_prompt \"Rename function X to Y\" global_refactor ['src/main.js', 'src/utils.js']"
+        },
+        {
+            "description": "Get the last 20 lines of all logs",
+            "command": "websocket-bridge get_logs all 20"
+        },
+        {
+            "description": "Start a sub-process named 'data_processor'",
+            "command": "websocket-bridge manage_subprocess start data_processor"
+        }
+    ]
+} 

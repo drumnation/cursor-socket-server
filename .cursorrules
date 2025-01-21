@@ -1,0 +1,214 @@
+{
+  "project_directives": {
+    "name": "cursor-websocket",
+    "ai_first": true,
+    "tools": [
+      {
+        "name": "websocket-bridge",
+        "description": "Interface with Roo Cline for tasks requiring a broader codebase understanding.",
+        "usage": "Use this tool when tasks involve global refactoring, project-wide impact analysis, long-range planning, or any operation that benefits from a 64k context window. Specify a custom port if connecting to a non-default Roo Cline instance.",
+        "commands": {
+          "global_refactor": {
+            "description": "Initiate a global refactoring operation managed by Roo Cline.",
+            "parameters": {
+              "files": {
+                "type": "array",
+                "description": "List of file paths relevant to the refactoring."
+              },
+              "instructions": {
+                "type": "string",
+                "description": "Detailed instructions for the refactoring operation."
+              }
+            },
+            "example": "websocket-bridge global_refactor --files=['src/main.js', 'src/utils.js'] --instructions='Rename function X to Y and update all references.'"
+          },
+          "impact_analysis": {
+            "description": "Request an impact analysis from Roo Cline for a proposed change.",
+            "parameters": {
+              "change_description": {
+                "type": "string",
+                "description": "Description of the proposed change."
+              },
+              "files": {
+                "type": "array",
+                "description": "List of file paths potentially affected by the change."
+              }
+            },
+            "example": "websocket-bridge impact_analysis --change_description='Adding new parameter to function Z' --files=['src/api.js', 'src/components/User.js']"
+          },
+          "long_range_plan": {
+            "description": "Collaborate with Roo Cline to develop a long-range implementation plan for a complex task.",
+            "parameters": {
+              "task_description": {
+                "type": "string",
+                "description": "Detailed description of the task or feature to be implemented."
+              }
+            },
+            "example": "websocket-bridge long_range_plan --task_description='Implement user authentication using OAuth 2.0'"
+          },
+          "context_summary": {
+            "description": "Obtain a context summary from Roo Cline for a specific part of the codebase.",
+            "parameters": {
+              "files": {
+                "type": "array",
+                "description": "List of file paths for which a context summary is needed."
+              }
+            },
+            "example": "websocket-bridge context_summary --files=['src/models/User.js', 'src/controllers/AuthController.js']"
+          },
+          "code_review": {
+            "description": "Submit a set of modified files to Roo Cline for a comprehensive code review.",
+            "parameters": {
+              "files": {
+                "type": "array",
+                "description": "List of file paths that have been modified and require review."
+              }
+            },
+            "example": "websocket-bridge code_review --files=['src/feature/new-module.js', 'src/utils/helper.js']"
+          },
+          "dependency_resolution": {
+            "description": "Delegate dependency-related issues to Roo Cline for resolution.",
+            "parameters": {
+              "issue_description": {
+                "type": "string",
+                "description": "Description of the dependency issue encountered."
+              },
+              "files": {
+                "type": "array",
+                "description": "List of file paths relevant to the dependency issue."
+              }
+            },
+            "example": "websocket-bridge dependency_resolution --issue_description='Conflicting versions of library X' --files=['package.json', 'src/main.js']"
+          },
+          "bug_detection": {
+            "description": "Request Roo Cline to analyze a potential bug and provide insights.",
+            "parameters": {
+              "bug_description": {
+                "type": "string",
+                "description": "Description of the potential bug."
+              },
+              "files": {
+                "type": "array",
+                "description": "List of file paths where the bug might be located."
+              }
+            },
+            "example": "websocket-bridge bug_detection --bug_description='Memory leak observed in user profile module' --files=['src/modules/UserProfile.js', 'src/utils/memoryManager.js']"
+          },
+          "security_audit": {
+            "description": "Task Roo Cline with performing a security audit on the codebase.",
+            "parameters": {},
+            "example": "websocket-bridge security_audit"
+          },
+          "performance_optimization": {
+            "description": "Request Roo Cline to identify performance bottlenecks and suggest optimizations.",
+            "parameters": {},
+            "example": "websocket-bridge performance_optimization"
+          },
+          "get_logs": {
+            "description": "Retrieve logs from the cursor-socket-server.",
+            "parameters": {
+              "log_type": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "connection",
+                  "message",
+                  "error"
+                ],
+                "default": "all",
+                "description": "Type of logs to retrieve."
+              },
+              "lines": {
+                "type": "integer",
+                "default": 10,
+                "description": "Number of log lines to retrieve (use with 'tail')."
+              },
+              "follow": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether to follow the logs in real-time."
+              }
+            },
+            "example": "websocket-bridge get_logs all 20"
+          },
+          "manage_subprocess": {
+            "description": "Manage sub-processes within the cursor-socket-server.",
+            "parameters": {
+              "action": {
+                "type": "string",
+                "enum": [
+                  "start",
+                  "stop",
+                  "status"
+                ],
+                "description": "Action to perform on the sub-process."
+              },
+              "process_name": {
+                "type": "string",
+                "description": "Name of the sub-process to manage."
+              }
+            },
+            "example": "websocket-bridge manage_subprocess start data_processor"
+          }
+        },
+        "parameters": {
+          "port": {
+            "type": "integer",
+            "description": "Optional port number for the WebSocket connection. Use this when connecting to a Roo Cline instance running on a non-default port."
+          }
+        }
+      }
+    ]
+  },
+  "context_initialization": {
+    "description": "Starting point for each interaction",
+    "steps": [
+      "Read '.brain/project-overview.md'",
+      "Read '.brain/directory-structure.md'",
+      "Read '.brain/tasks.md'",
+      "Establish connection with Roo Cline using 'cursor-socket' if required for the current task, using the specified port if provided."
+    ]
+  },
+  "rules": {
+    "when_to_use_roo": {
+      "description": "Guidelines for determining when to utilize the websocket-bridge tool.",
+      "conditions": [
+        "If the task requires understanding more than the current file and a few related files.",
+        "If the task involves analyzing or modifying code across multiple modules or the entire project.",
+        "If the task benefits from a larger context window (64k) for accurate analysis or generation.",
+        "If the task is computationally intensive and can be offloaded to Roo Cline."
+      ]
+    },
+    "communication_protocol": {
+      "description": "Defines the communication protocol between Cursor and Roo Cline.",
+      "steps": [
+        "Cursor formulates a clear, concise command using the defined 'websocket-bridge' tool and its commands.",
+        "Cursor includes the 'port' parameter if a non-default port is required.",
+        "Cursor sends the command to Roo Cline via the established 'cursor-socket' connection.",
+        "Roo Cline processes the command and sends back a structured response (e.g., JSON).",
+        "Cursor parses the response and integrates the results into its workflow."
+      ]
+    },
+    "error_handling": {
+      "description": "Specifies how to handle errors during communication with Roo Cline.",
+      "steps": [
+        "If 'cursor-socket' connection fails, attempt to reconnect a predetermined number of times, trying different ports if necessary.",
+        "If Roo Cline returns an error, log the error and attempt to recover or notify the user.",
+        "If a task delegated to Roo Cline fails, consider alternative approaches or break down the task further."
+      ]
+    },
+    "custom_port_usage": {
+      "description": "Guidelines for using custom ports with the websocket-bridge tool.",
+      "conditions": [
+        "If the user specifies a non-default port for Roo Cline.",
+        "If connecting to a specific Roo Cline instance running on a different port.",
+        "If the default port (8080) is unavailable or in use."
+      ],
+      "steps": [
+        "Identify the desired port number.",
+        "Include the 'port' parameter in the websocket-bridge command.",
+        "Ensure that the cursor-socket-server is started with the corresponding port argument."
+      ]
+    }
+  }
+}
